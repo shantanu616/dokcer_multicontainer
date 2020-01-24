@@ -6,3 +6,13 @@ before_install:
   - docker build -t  shantanu616/dokcer_multicontainer -f ./client/Dockerfile.dev ./client
 scripts:
 - echo "skipping test"
+after_success:
+  - docker build -t shantanu616/multi_client ./client
+  - docker build -t shantanu616/multi_server ./server
+  - docker build -t shantanu616/multi_worker ./worker
+  - docker build -t shantanu616/multi_nginx ./nginx
+  - echo "$DOCKER_PASSWORD"|docker login -u "$DOCKER_ID" --password-stdin
+  - docker push shantanu616/multi_client
+  - docker push shantanu616/multi_server
+  - docker push shantanu616/multi_worker
+  - docker push shantanu616/multi_nginx
